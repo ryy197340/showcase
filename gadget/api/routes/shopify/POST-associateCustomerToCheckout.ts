@@ -1,0 +1,141 @@
+import {
+  withAppCheckAuth,
+  createAuthenticatedSchema,
+} from '../../middleware/appCheckAuth'
+import { getShopifyClient } from '../../utils/shopify'
+
+const cartFragment = `
+  fragment CartFragment on Cart {
+    id
+    createdAt
+    updatedAt
+    checkoutUrl
+    lines(first: 30) {
+      edges {
+        node {
+          id
+          quantity
+          attributes {
+            key
+            value
+          }
+          estimatedCost {
+            totalAmount {
+              amount
+              currencyCode
+            }
+          }
+          sellingPlanAllocation {
+            sellingPlan {
+              id
+              name
+            }
+          }
+          merchandise {
+            ... on ProductVariant {
+              id
+              title
+              product {
+                id
+                title
+                description
+                images(first: 1) {
+                  edges {
+                    node {
+                      id
+                      url
+                      transformedSrc(maxWidth: 200, maxHeight: 200)
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    estimatedCost {
+      totalAmount {
+        amount
+        currencyCode
+      }
+      subtotalAmount {
+        amount
+        currencyCode
+      }
+      totalTaxAmount {
+        amount
+        currencyCode
+      }
+      totalDutyAmount {
+        amount
+        currencyCode
+      }
+    }
+    checkoutUrl
+    buyerIdentity {
+      email
+      phone
+      countryCode
+      customer {
+        id
+      }
+    }
+  }
+`
+
+const checkoutCustomerAssociateV2Mutation = `
+  mutation cartBuyerIdentityUpdate(
+    $cartId: ID!
+    $buyerIdentityInput: CartBuyerIdentityInput!
+  ) {
+    cartBuyerIdentityUpdate(
+      cartId: $cartId
+      buyerIdentity: $buyerIdentityInput
+    ) {
+      cart {
+        ...CartFragment
+      }
+    }
+  }
+  ${cartFragment}
+`
+
+/**
+ * Route handler for secure Skio GraphQL proxy with Firebase App Check
+ *
+ * See: https://docs.gadget.dev/guides/http-routes/route-configuration#route-context
+ */
+const route = withAppCheckAuth(
+  async ({ request, reply, api, logger, connections }) => {
+    const { cartId, buyerIdentityInput } = request.body
+
+    const variables = {
+      cartId, buyerIdentityInput,
+    }
+
+    const shopifyClient = await getShopifyClient()
+    if (!shopifyClient) {
+      logger.error('No Shopify connection available')
+      return await reply
+        .code(500)
+        .send({ error: 'Shopify connection not available' })
+    }
+
+    const responseData = await shopifyClient.request(
+      checkoutCustomerAssociateV2Mutation,
+      variables
+    )
+
+    logger.info('Associating customer to checkout successfully')
+
+    await reply.type('application/json').send(responseData)
+  }
+)
+
+route.options = createAuthenticatedSchema({
+  cartId: { type: 'string' },
+  buyerIdentityInput: { type: 'object' },
+})
+
+export default route
