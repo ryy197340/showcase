@@ -1,0 +1,43 @@
+query CartTransformRunInput {
+  cart {
+    lines {
+      id
+      quantity
+      digitalDeliveryFee: attribute(key: "_digital_delivery_fee") {
+        key
+        value
+      }
+      feeAmount: attribute(key: "_fee_amount") {
+        key
+        value
+      }
+      cartFeeImage: attribute(key: "_digital_fee_cart_image") {
+        key
+        value
+      }
+      cartFeeSKU: attribute(key: "_fee_sku") {
+        key
+        value
+      }
+      rentalExpirationDate: attribute(key: "_rental_expiration_date") {
+        key
+        value
+      }
+      rentDueDate: attribute(key: "Rent Due Date") {
+        key
+        value
+      }
+      merchandise {
+        ... on ProductVariant {
+          id
+          isRental: metafield(namespace: "cm_rental", key: "is_rental") {
+            value
+          }
+          rentalExpDate: metafield(namespace: "cm_rental", key: "expiration_date") {
+            value
+          }
+        }
+      }
+    }
+  }
+}

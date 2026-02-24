@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(npm install:*)",
+      "Bash(npm view:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npx shopify app dev --help:*)",
+      "Bash(shopify app dev --help:*)",
+      "Bash(shopify app build:*)",
+      "Bash(node -e:*)"
+    ]
+  }
+}
