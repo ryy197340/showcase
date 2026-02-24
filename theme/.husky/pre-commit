@@ -1,0 +1,6 @@
+npm run huskyLint
+
+# Only add files that have been staged.
+# If any part of the file is staged, the whole file will become staged
+# and therefore linted as well.
+git add $(git diff --name-only --staged | xargs)

@@ -1,0 +1,40 @@
+.blog-modules .portableText {
+  h2 {
+    line-height: 1.2rem;
+    font-size: 1.875rem;
+    margin-top: 0.225rem;
+    text-align: center;
+    padding-top: 2rem;
+  }
+
+  h3 {
+    line-height: 1.2;
+    font-size: 1.4rem;
+    text-align: center;
+    font-weight: 800;
+    padding-bottom: 0.875rem;
+    padding-top: 0.875rem;
+  }
+
+  p {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    text-align: center;
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+    line-height: 1.5rem;
+  }
+
+  ul li {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    text-align: center;
+    line-height: 1.5rem;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+

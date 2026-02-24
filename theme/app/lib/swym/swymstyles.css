@@ -1,0 +1,30 @@
+@media (hover: none){
+  a.swym-h-img-link {
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 768px) {
+  a.swym-h-img-link {
+    pointer-events: none;
+  }
+}
+
+.modal .swym-hl-wishlist-button.swym-hl-wishlist-button-type-icon {
+  padding: unset;
+  position: unset;
+  margin-top: 8px;
+}
+
+.swym-h-login-popup-shadow, .swym-hl-notification-container{
+  box-shadow: 0px 0px 24px 8px rgba(0, 0, 0, 0.10);
+}
+
+.swym-h-hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.swym-h-hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Edge */
+}
